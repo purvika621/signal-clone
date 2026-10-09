@@ -1,0 +1,20 @@
+.onboarding { min-height: 100dvh; display: grid; place-items: center; background: var(--signal-sidebar); padding: 28px; }
+.card { width: min(440px, 100%); background: white; border: 1px solid #dedede; border-radius: 16px; padding: 30px; color: #292929; box-shadow: 0 12px 48px #0000000a; }
+.card h1 { font-size: 24px; margin: 16px 0; }
+.card p { color: #666; line-height: 1.5; font-size: 14px; margin: 16px 0; }
+.brand { color: #2867f5; font-weight: 700; font-size: 28px; }
+.card form { display: grid; gap: 16px; }
+.card label { display: grid; gap: 8px; font-size: 14px; }
+.card input:not([type=radio]) { border: 1px solid #aaa; border-radius: 8px; padding: 11px; width: 100%; }
+.card button { cursor: pointer; border-radius: 8px; padding: 10px 14px; background: #ededed; }
+.card button:disabled { opacity: .6; cursor: wait; }
+.card .primary { background: #2867f5; color: white; font-weight: 600; }
+.card .link { padding: 0 4px; background: transparent; color: #2867f5; text-decoration: underline; }
+.card fieldset { border: 0; padding: 0; }
+.card legend { font-size: 14px; margin-bottom: 10px; }
+.avatars { display: flex; flex-wrap: wrap; gap: 12px; }
+.avatars label { display: flex; align-items: center; }
+.error { color: #a62121; background: #fff1f1; padding: 12px; border-radius: 8px; font-size: 14px; line-height: 1.5; }
+.error button { display: block; margin-top: 8px; padding: 6px 12px; background: #eee; border-radius: 6px; cursor: pointer; }
+.dialog { margin: auto; padding: 0; border: 0; background: transparent; max-height: calc(100dvh - 48px); width: min(440px, calc(100vw - 48px)); border-radius: 16px; }
+.dialog::backdrop { background: #0005; }

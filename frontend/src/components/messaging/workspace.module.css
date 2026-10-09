@@ -1,0 +1,100 @@
+.workspace {
+  display: grid;
+  grid-template-columns: var(--signal-rail-width) var(--signal-sidebar-width) minmax(0, 1fr);
+  width: 100%; height: 100dvh; min-height: 0; overflow: hidden;
+  color: var(--signal-text); background: var(--signal-surface); font-size: var(--signal-body-size);
+}
+.rail { display: flex; flex-direction: column; align-items: center; min-height: 0; padding: 16px 8px 18px; background: var(--signal-sidebar); border-right: 1px solid var(--signal-border); }
+.rail .railButton { width: 52px; height: 44px; border-radius: 10px; }
+.railPrimary { display: grid; gap: 14px; margin-top: 18px; }
+.railChat { position: relative; }
+.railSelected { background: var(--signal-selected); }
+.railBadge { position: absolute; top: -3px; right: 2px; display: grid; place-items: center; min-width: 20px; height: 20px; padding: 0 4px; color: #fff; background: #fa4c43; border-radius: 20px; font-size: 12px; pointer-events: none; }
+.railBottom { display: grid; justify-items: center; gap: 16px; margin-top: auto; }
+.profileButton { display: grid; place-items: center; width: 44px; height: 40px; border: 0; background: transparent; }
+.sidebar { display: flex; flex-direction: column; min-height: 0; min-width: 0; background: var(--signal-sidebar); border-right: 1px solid var(--signal-border); }
+.sidebarHeader { display: flex; align-items: center; justify-content: space-between; height: var(--signal-header-height); flex: 0 0 var(--signal-header-height); padding: 0 20px 0 24px; }
+.sidebarHeader h1 { font-size: 24px; font-weight: 650; letter-spacing: -0.5px; }
+.sidebarActions, .headerActions { display: flex; align-items: center; gap: 10px; }
+.searchContainer { padding: 2px 16px 12px; }
+.searchField { display: flex; align-items: center; gap: 9px; height: 36px; padding: 0 11px; border-radius: 9px; color: var(--signal-muted); background: var(--signal-search); }
+.searchField input { width: 100%; min-width: 0; padding: 0; outline: 0; border: 0; background: transparent; font-size: 14px; color: var(--signal-text); }
+.searchField input::placeholder { color: var(--signal-muted); opacity: 1; }
+.searchField input::-webkit-search-cancel-button { display: none; }
+.searchField:focus-within { box-shadow: 0 0 0 2px var(--signal-focus); }
+.searchField > button { width: 22px; height: 24px; }
+.conversationList { flex: 1; min-height: 0; overflow: auto; padding: 0 8px 12px; scrollbar-width: thin; scrollbar-color: #c6c6c6 transparent; }
+.conversationList ul { list-style: none; padding: 0; margin: 0; }
+.conversationRow { display: flex; align-items: center; gap: 13px; width: 100%; min-width: 0; height: 86px; padding: 12px 16px; text-align: left; border: 0; border-radius: 11px; color: inherit; background: transparent; cursor: pointer; }
+.conversationRow:hover { background: var(--signal-hover); }
+.conversationSelected, .conversationSelected:hover { background: var(--signal-selected); }
+.rowContent { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1; }
+.rowHeading { display: flex; align-items: baseline; gap: 6px; min-width: 0; }
+.rowName { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 16px; line-height: 21px; font-weight: 600; }
+.activity { flex: 0 0 auto; font-size: 12px; line-height: 18px; color: var(--signal-muted); }
+.rowBottom { display: flex; justify-content: space-between; gap: 8px; min-height: 20px; }
+.preview { display: -webkit-box; flex: 1; min-width: 0; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 20px; color: var(--signal-muted); font-size: 14px; }
+.rowStatus { flex: 0 0 auto; display: flex; align-items: flex-end; align-self: flex-start; padding-top: 2px; color: #8b8b8b; }
+.unreadBadge { display: grid; place-items: center; height: 20px; min-width: 20px; padding: 0 5px; border-radius: 20px; background: var(--signal-blue); color: white; font-size: 12px; font-weight: 500; }
+.noResults { padding: 32px 16px; text-align: center; color: var(--signal-muted); font-size: 14px; }
+.chatPane { display: grid; grid-template-rows: var(--signal-header-height) minmax(0, 1fr) auto; min-width: 0; min-height: 0; background: var(--signal-surface); }
+.chatHeader { display: flex; align-items: center; justify-content: space-between; min-width: 0; gap: 16px; padding: 0 24px; background: var(--signal-surface); }
+.chatIdentity { display: flex; gap: 12px; align-items: center; min-width: 0; flex: 1 1 0; overflow: hidden; }
+.headerText { flex: 1 1 0; min-width: 0; overflow: hidden; }
+.chatIdentity h2 { font-size: 16px; line-height: 22px; font-weight: 600; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+.headerActions { flex: 0 0 auto; gap: 16px; }
+.messageThread { min-height: 0; min-width: 0; overflow-y: auto; overflow-x: hidden; padding: 0 28px 16px 24px; scrollbar-width: thin; scrollbar-color: #cfcfcf transparent; }
+.messages { display: flex; flex-direction: column; min-height: 100%; justify-content: flex-end; }
+.dateSeparator { flex: 0 0 auto; align-self: center; margin: 21px 0 24px; color: var(--signal-muted); font-size: 12px; text-align: center; }
+.messageRow { display: flex; align-items: flex-end; flex: 0 0 auto; min-width: 0; gap: 10px; margin-top: 18px; }
+.messageRow.grouped { margin-top: 5px; }
+.incoming { justify-content: flex-start; }
+.outgoing { justify-content: flex-end; }
+.senderAvatar { display: flex; width: 28px; flex: 0 0 28px; align-items: flex-end; padding-bottom: 2px; }
+.bubble { position: relative; min-width: 66px; max-width: min(72%, 560px); padding: 10px 13px; border-radius: var(--signal-bubble-radius); color: var(--signal-text); background: var(--signal-bubble-incoming); --receipt-background: var(--signal-bubble-incoming); }
+.outgoing .bubble { color: white; background: var(--chat-color, var(--signal-blue)); --receipt-background: var(--chat-color, var(--signal-blue)); }
+.senderName { display: block; margin-bottom: 4px; font-size: 13px; line-height: 18px; font-weight: 600; }
+.messageText { margin: 0; font-size: 15px; line-height: 22px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.metadataSpace { display: inline-block; padding-left: 10px; font-size: 11px; line-height: 16px; color: transparent; user-select: none; }
+.metadataWithReceipt { padding-right: 25px; }
+.metadataFailed { padding-right: 76px; }
+.messageMetadata { position: absolute; right: 12px; bottom: 9px; display: flex; align-items: center; gap: 4px; font-size: 11px; line-height: 16px; color: var(--signal-muted); white-space: nowrap; }
+.outgoing .messageMetadata { color: rgba(255, 255, 255, 0.75); }
+.receipt { display: inline-flex; align-items: center; vertical-align: middle; flex: 0 0 auto; }
+.receiptRead { opacity: 0.95; }
+.composer { position: relative; display: flex; align-items: center; gap: 16px; min-width: 0; min-height: 72px; padding: 12px 20px 16px; background: var(--signal-surface); }
+.composerField { flex: 1; min-width: 0; border-radius: 24px; min-height: 42px; padding: 9px 16px; background: var(--signal-composer); }
+.composerField textarea { width: 100%; height: 24px; padding: 0; margin: 0; display: block; resize: none; overflow-y: auto; border: none; background: transparent; outline: none; color: var(--signal-text); font-size: 15px; line-height: 24px; }
+.composerField textarea::placeholder { color: var(--signal-muted); opacity: 1; }
+.composerField:focus-within { box-shadow: 0 0 0 2px var(--signal-focus); }
+.composerActions { display: flex; align-items: center; gap: 12px; }
+.emptyPane { display: grid; place-items: center; min-width: 0; background: var(--signal-surface); }
+.emptyContent { max-width: 360px; padding: 24px; text-align: center; }
+.emptyIcon { display: grid; place-items: center; width: 90px; height: 90px; margin: 0 auto 24px; border-radius: 50%; color: #929292; background: #f1f1f1; }
+.emptyContent h2 { margin: 0 0 10px; font-size: 19px; font-weight: 600; }
+.emptyContent p { margin: 0; font-size: 14px; line-height: 21px; color: var(--signal-muted); }
+/* Desktop sizing only; mobile layouts are outside this checkpoint. */
+@media (min-width: 1600px) { .messageThread { padding-right: 36px; padding-left: 28px; } }
+.presence { display: block; color: #7b7b7b; font-size: 11px; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.connectionStatus { padding: 6px 20px; font-size: 12px; color: #775518; background: #fff5dd; overflow-wrap: anywhere; }
+.connectionStatus button { margin-left: 8px; text-decoration: underline; cursor: pointer; }
+.typingLabel { position: absolute; left: 24px; right: 20px; top: -19px; height: 19px; color: var(--signal-muted); font-size: 12px; background: var(--signal-surface); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.retrySend { color: inherit; border: 0; padding: 0; background: transparent; text-decoration: underline; cursor: pointer; font-size: 11px; }
+.sendButton { color: var(--signal-blue); }
+.sendButton:disabled { opacity: .4; }
+@media (max-width: 1000px) {
+  .workspace { grid-template-columns: 60px 260px minmax(0, 1fr); }
+  .rail .railButton { width: 42px; }
+  .chatHeader { padding: 0 12px; gap: 8px; }
+  .headerActions { gap: 3px; }
+  .chatIdentity { gap: 7px; }
+  .composer { gap: 6px; padding-right: 10px; padding-left: 10px; }
+  .composerActions { gap: 3px; }
+  .messageThread { padding-right: 12px; padding-left: 12px; }
+}
+.pickerTools { padding: 12px 20px; font-size: 13px; }
+.pickerHeader { justify-content: flex-start; gap: 12px; }
+.pickerTools button, .noResults button { background: #e6e6e6; border-radius: 8px; padding: 8px 12px; cursor: pointer; }
+.pickerTools p { margin-top: 10px; color: #7b7b7b; }
+.pickerTools label { display: grid; gap: 8px; margin-top: 10px; }
+.pickerTools input { background: white; border: 1px solid #dedede; border-radius: 8px; padding: 8px; width: 100%; }

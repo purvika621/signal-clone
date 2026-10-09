@@ -1,0 +1,27 @@
+.menuAnchor { position: relative; flex: none; }
+.menu { position: absolute; top: calc(100% + 6px); right: 0; z-index: 20; width: 210px; padding: 6px; background: white; border: 1px solid var(--signal-border); border-radius: 10px; box-shadow: 0 8px 30px #0002; }
+.menuLeft { left: 0; right: auto; }
+.menu button { display: block; width: 100%; text-align: left; border-radius: 6px; padding: 10px 12px; font-size: 14px; cursor: pointer; }
+.menu button:hover, .menu button:focus-visible { background: var(--signal-hover); }
+.toasts { position: fixed; right: 20px; bottom: 90px; width: min(350px, calc(100vw - 40px)); z-index: 40; display: grid; gap: 8px; }
+.toast { display: flex; align-items: flex-start; gap: 6px; background: white; border: 1px solid var(--signal-border); border-radius: 12px; box-shadow: 0 6px 25px #0002; padding: 12px; color: var(--signal-text); }
+.toastContent { text-align: left; flex: 1; min-width: 0; cursor: pointer; }
+.toastContent:disabled { cursor: default; opacity: 1; }
+.toastContent strong, .toastContent span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.toastContent strong { font-size: 14px; font-weight: 600; }
+.toastContent span { color: var(--signal-muted); font-size: 13px; margin-top: 4px; }
+.dialog { margin: auto; padding: 0; border: 1px solid var(--signal-border); border-radius: 14px; width: min(620px, calc(100vw - 40px)); max-height: calc(100dvh - 40px); color: var(--signal-text); background: white; }
+.dialog::backdrop { background: #0005; }
+.dialogHeader { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; border-bottom: 1px solid var(--signal-border); }
+.dialogHeader h2 { font-size: 19px; font-weight: 600; }
+.settings { display: grid; grid-template-columns: 160px minmax(0, 1fr); min-height: 250px; }
+.categories { padding: 12px 8px; background: var(--signal-sidebar); border-right: 1px solid var(--signal-border); }
+.categories button { width: 100%; padding: 11px; text-align: left; border-radius: 8px; font-size: 14px; cursor: pointer; }
+.categories button[aria-current=true] { background: var(--signal-selected); }
+.placeholder { padding: 28px; }
+.placeholder h3 { font-weight: 600; font-size: 17px; margin-bottom: 12px; }
+.placeholder p { color: var(--signal-muted); font-size: 14px; line-height: 1.6; }
+.placeholder .comingSoon { display: inline-block; border-radius: 20px; background: var(--signal-search); padding: 5px 10px; font-size: 12px; margin-bottom: 16px; }
+.filters { display: flex; gap: 6px; padding: 0 16px 12px; }
+.filters button { border-radius: 20px; background: var(--signal-search); padding: 6px 13px; cursor: pointer; font-size: 12px; }
+.filters button[aria-pressed=true] { background: #dce7ff; color: #2259c7; font-weight: 600; }

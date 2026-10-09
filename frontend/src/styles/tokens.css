@@ -1,0 +1,19 @@
+:root {
+  --signal-surface: #ffffff;
+  --signal-sidebar: #f6f6f6;
+  --signal-selected: #dedede;
+  --signal-hover: #ebebeb;
+  --signal-border: #dedede;
+  --signal-search: #e6e6e6;
+  --signal-composer: #ededed;
+  --signal-bubble-incoming: #e9e9e9;
+  --signal-text: #292929;
+  --signal-muted: #7b7b7b;
+  --signal-blue: #2867f5;
+  --signal-focus: #9bbaf9;
+  --signal-rail-width: 72px;
+  --signal-sidebar-width: 340px;
+  --signal-header-height: 76px;
+  --signal-body-size: 15px;
+  --signal-bubble-radius: 20px;
+}
