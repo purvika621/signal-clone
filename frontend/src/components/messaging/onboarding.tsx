@@ -84,12 +84,13 @@ function Application() {
     clear(); notify({ title: "Logged out" });
   }
   return <div data-signal-application="true">
-    {state === "ready" && session && !session.needs_profile ? <><SignalWorkspace key={session.user.id} user={session.user} readingPaused={editing} onProfile={() => setEditing(true)} />{editing && <ProfileDialog user={session.user} onSave={accept} onLogout={logout} onCancel={() => setEditing(false)} />}</> : <main className={styles.onboarding}>
+    {state === "ready" && session && !session.needs_profile ? <><SignalWorkspace key={session.user.id} user={session.user} readingPaused={editing} onProfile={() => setEditing(true)} />{editing && <ProfileDialog user={session.user} onSave={accept} onLogout={logout} onCancel={() => setEditing(false)} />}</> : <main className={styles.onboarding}><div className={styles.onboardingContent}>
+      <aside className={styles.demoNotice} aria-label="Unofficial assignment demo notice">Unofficial Signal UI assignment demo. Not affiliated with Signal. Use fictional details and demo OTP 123456. Never enter real passwords or real verification codes.</aside>
       {state === "loading" && <p role="status">Restoring your session…</p>}
       {state === "error" && <section className={styles.card}><h1>Unable to connect</h1><ErrorNotice message={error} onRetry={() => { setState("loading"); setAttempt((a) => a + 1); }} /></section>}
       {state === "login" && <Login onSession={accept} />}
       {state === "ready" && session?.needs_profile && <ProfileForm user={session.user} onSave={accept} onLogout={logout} />}
-    </main>}
+    </div></main>}
   </div>;
 }
 
