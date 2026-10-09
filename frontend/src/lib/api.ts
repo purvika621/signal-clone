@@ -7,8 +7,12 @@ export class ApiError extends Error {
   }
 }
 
-function apiBaseUrl(): string {
+export function apiBaseUrl(): string {
   const value = process.env.NEXT_PUBLIC_API_URL;
+  if (value === "same-origin") {
+    if (typeof window === "undefined") throw new ApiError("Same-origin API requests require a browser.");
+    return window.location.origin;
+  }
   if (!value) throw new ApiError("NEXT_PUBLIC_API_URL is not configured.");
   const url = new URL(value);
   if (!['http:', 'https:'].includes(url.protocol)) {

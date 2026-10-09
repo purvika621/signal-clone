@@ -1,4 +1,4 @@
-import { apiRequest, ApiError } from "@/lib/api";
+import { apiRequest, ApiError, apiBaseUrl } from "@/lib/api";
 import type { ConversationPreview, PreviewMessage, Profile, ReceiptStatus } from "./types";
 
 export type User = { id: string; username: string | null; phone_e164: string | null; display_name: string; avatar_url: string | null; online: boolean; last_seen_at: string | null };
@@ -90,9 +90,7 @@ export const markDelivered = (id: string, message_ids: string[]) => apiRequest(`
 export const pendingDelivery = () => apiRequest(`${path}/messages/pending-delivery`, (v) => list(v, (entry) => { const row = object(entry); return { conversation_id: string(row.conversation_id), message_ids: list(row.message_ids, string) }; }));
 export function websocketUrl(cursor: number): string {
   const configured = process.env.NEXT_PUBLIC_WS_URL;
-  const base = process.env.NEXT_PUBLIC_API_URL;
-  if (!configured && !base) throw new ApiError("API URL is not configured");
-  const url = new URL(configured || `${base!.replace(/\/$/, "")}/api/v1/ws`);
+  const url = new URL(configured || `${apiBaseUrl()}/api/v1/ws`);
   if (!configured) url.protocol = url.protocol === "https:" ? "wss:" : "ws:";
   if (!["ws:", "wss:"].includes(url.protocol)) throw new ApiError("WebSocket URL must use WS or WSS");
   url.searchParams.set("cursor", String(cursor));

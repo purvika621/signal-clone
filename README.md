@@ -2,7 +2,9 @@
 
 A browser-hosted recreation of the Signal Desktop messaging application for the Scaler assignment. It reproduces the conversation workspace rather than the signal.org visitor website. The implementation is original; no existing Signal clone repository was copied.
 
-The assignment PDF is preserved at the root. See [REQUIREMENTS.md](REQUIREMENTS.md) for assignment requirements, [DESIGN.md](DESIGN.md) for reference/architecture decisions, and [DEVELOPMENT.md](DEVELOPMENT.md) for detailed contracts and coverage. Deployment and public repository/demo links are pending; no hosted URL is claimed.
+The assignment PDF is preserved at the root. See [REQUIREMENTS.md](REQUIREMENTS.md) for assignment requirements, [DESIGN.md](DESIGN.md) for reference/architecture decisions, and [DEVELOPMENT.md](DEVELOPMENT.md) for detailed contracts and coverage. The source repository is published; hosting and a verified demo link remain pending.
+
+Source repository: [purvika621/signal-clone](https://github.com/purvika621/signal-clone). The single-origin Docker deployment package is tested locally; [DEPLOYMENT.md](DEPLOYMENT.md) contains Railway settings, persistent SQLite requirements and acceptance checks. Hosting remains pending approval. This package supersedes the split-provider deployment proposal below for the no-custom-domain setup; existing Windows development commands remain valid.
 
 ## Stack and features
 
@@ -123,7 +125,7 @@ Backend tests use isolated temporary SQLite databases and real local HTTP/WebSoc
 
 ## Production deployment prerequisites
 
-Provider selection and publishing are pending. Require a long-running Python service, HTTPS/WebSocket upgrades, a writable persistent volume that survives restart/redeploy, and one backend instance. SQLite must not live on ephemeral/serverless disk. Resolve provider/account access, volume availability/cost, public origin and routing before creating resources.
+The prepared single-origin Railway Docker package is documented in DEPLOYMENT.md; cloud publishing remains pending approval. Require HTTPS/WebSocket upgrades, a writable persistent volume that survives restart/redeploy, and one backend instance. SQLite must not live on ephemeral/serverless disk. Resolve account/trial access, volume availability/cost and public origin before creating resources. The following separate-process commands describe the underlying services; the Docker package handles their startup and proxy automatically.
 
 Prefer one public origin: reverse-proxy `/api/v1/*` (including WS), `/health`, `/docs` and `/openapi.json` to FastAPI, other routes/assets to Next. Preserve paths, cookies and Origin and enable WebSocket upgrade headers/timeouts. Default SameSite=Lax cookies require same-origin or same-site hosting; unrelated frontend/backend domains need a reviewed cookie strategy.
 
@@ -145,4 +147,4 @@ npm run build
 npm run start:production -- --port "$PORT"
 ```
 
-Each service needs its own port; if both processes share one container, assign distinct internal ports and reverse-proxy them. Provider-specific instructions and verified public GitHub/demo submission links will be added after provider selection and publication approval. No deployment is claimed complete.
+Each process needs its own internal port. The Docker package runs Next on 3000, FastAPI on 8000 and Nginx on the public PORT. See DEPLOYMENT.md for Railway instructions and local container checks. The verified hosted demo link will be added after deployment and hosted testing. No deployment is claimed complete.
