@@ -8,7 +8,7 @@ from sqlalchemy.orm import selectinload
 
 from app.auth import CurrentUser, Db, mutation_origin
 from app.models import Contact, Conversation, ConversationMember, DirectPair, Message, MessageReceipt, User
-from app.schemas import ContactInput, ContactOut, ConversationOut, DirectInput, HistoryOut, MessageOut, UserOut
+from app.schemas import ContactInput, ContactOut, ConversationOut, DirectInput, HistoryOut, MessageOut, UserOut, ReactionOut
 from app.realtime import manager
 
 router = APIRouter(prefix="/api/v1", dependencies=[Depends(mutation_origin)])
@@ -45,7 +45,8 @@ def message_out(message: Message, user_id: str) -> MessageOut:
             receipt = "delivered"
     return MessageOut(id=message.id, sequence=message.sequence, client_message_id=message.client_message_id, kind=message.kind,
         body=message.body, created_at=message.created_at,
-        sender=public_user(message.sender) if message.sender else None, receipt=receipt)
+        sender=public_user(message.sender) if message.sender else None, receipt=receipt,
+        reactions=[ReactionOut(user_id=r.user_id, emoji=r.emoji) for r in message.reactions], reaction_version=message.reaction_version)
 
 
 def conversation_out(db, conversation: Conversation, member: ConversationMember, user_id: str):

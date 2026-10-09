@@ -1,3 +1,4 @@
+import type { RefObject } from "react";
 import { Avatar } from "@/components/ui/avatar";
 import { Icon } from "@/components/ui/icon";
 import { IconButton } from "@/components/ui/icon-button";
@@ -17,7 +18,8 @@ function ConversationRow({ conversation, selected, onSelect }: { conversation: C
   </button></li>;
 }
 
-export function ConversationSidebar({ conversations, selectedId, query, onSearch, onSelect, onNewChat, onNewGroup, onSettings, filter, onFilter, loading, error, onRetry, connection, notice, onRecover }: {
+export function ConversationSidebar({ conversations, selectedId, query, onSearch, onSelect, onNewChat, onNewGroup, onSettings, filter, onFilter, loading, error, onRetry, connection, notice, onRecover, searchRef }: {
+  searchRef?: RefObject<HTMLInputElement | null>;
   conversations: ConversationPreview[]; selectedId: string | null; query: string; onSearch: (query: string) => void; onSelect: (id: string) => void;
   onNewChat: () => void; loading: boolean; error?: string; onRetry: () => void;
   connection: string; notice: string; onRecover: () => void;
@@ -28,7 +30,7 @@ export function ConversationSidebar({ conversations, selectedId, query, onSearch
   return <aside className={styles.sidebar} aria-label="Conversations">
     <header className={styles.sidebarHeader}><h1>Chats</h1><div className={styles.sidebarActions}><IconButton icon="compose" label="New chat" onClick={onNewChat} /><ActionMenu label="Chat list menu" items={[{ label: "New chat", action: onNewChat }, { label: "New group", action: onNewGroup }, { label: "All conversations", action: () => onFilter("all") }, { label: "Unread conversations", action: () => onFilter("unread") }, { label: "Settings", action: onSettings }]} /></div></header>
     {(connection !== "Connected" || notice) && <div className={styles.connectionStatus} role="status">{notice || connection}{notice && <button type="button" onClick={onRecover}>Retry</button>}</div>}
-    <div className={styles.searchContainer}><div className={styles.searchField}><Icon name="search" size={19} /><input type="search" aria-label="Search conversations" placeholder="Search" value={query} onChange={(event) => onSearch(event.target.value)} autoComplete="off" />{query && <IconButton icon="close" label="Clear search" size={16} onClick={() => onSearch("")} />}</div></div>
+    <div className={styles.searchContainer}><div className={styles.searchField}><Icon name="search" size={19} /><input ref={searchRef} type="search" aria-label="Search conversations" placeholder="Search" value={query} onChange={(event) => onSearch(event.target.value)} autoComplete="off" />{query && <IconButton icon="close" label="Clear search" size={16} onClick={() => onSearch("")} />}</div></div>
     <div className={overlayStyles.filters} aria-label="Inbox filters"><button type="button" aria-pressed={filter === "all"} onClick={() => onFilter("all")}>All</button><button type="button" aria-pressed={filter === "unread"} onClick={() => onFilter("unread")}>Unread</button></div>
     <div className={styles.conversationList}>{loading ? <p className={styles.noResults} role="status">Loading conversations…</p> : error ? <div className={styles.noResults} role="alert"><p>{error}</p><button type="button" onClick={onRetry}>Retry</button></div> : <><ul>{visible.map((conversation) => <ConversationRow key={conversation.id} conversation={conversation} selected={selectedId === conversation.id} onSelect={() => onSelect(conversation.id)} />)}</ul>{visible.length === 0 && <p className={styles.noResults} role="status">{query ? "No conversations found" : filter === "unread" ? "No unread conversations" : "No conversations yet. Start a new chat."}</p>}</>}</div>
   </aside>;

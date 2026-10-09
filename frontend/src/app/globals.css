@@ -5,6 +5,7 @@ html, body { width: 100%; height: 100%; }
 * { box-sizing: border-box; }
 body {
   margin: 0;
+  background: var(--signal-surface); color: var(--signal-text);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
 }
 button, input, textarea { font: inherit; }
@@ -12,6 +13,10 @@ button:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--signal
 .signal-icon-button { display: inline-flex; justify-content: center; align-items: center; flex: 0 0 auto; width: 32px; height: 32px; padding: 3px; border: 0; border-radius: 6px; color: var(--signal-text); background: transparent; cursor: pointer; }
 .signal-icon-button:not(:disabled):hover { background: var(--signal-hover); }
 .signal-icon-button:disabled { opacity: 1; cursor: default; }
-.signal-avatar { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; overflow: hidden; border-radius: 50%; background: #dcd5eb; color: #635177; font-size: 14px; font-weight: 500; }
+.signal-avatar { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; overflow: hidden; border-radius: 50%; background: var(--signal-avatar-surface); color: var(--signal-avatar-text); font-size: 14px; font-weight: 500; }
 .signal-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.signal-avatar-note { background: #e9defe; color: #7c3cff; }
+.signal-avatar-note { background: var(--signal-note-surface); color: var(--signal-note-text); }
+
+input, textarea, select { color: var(--signal-text); background-color: var(--signal-surface); }
+input::placeholder, textarea::placeholder { color: var(--signal-muted); opacity: 1; }
+input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid var(--signal-focus); outline-offset: 2px; }

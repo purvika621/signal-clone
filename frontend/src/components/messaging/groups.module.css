@@ -1,25 +1,31 @@
 .stepActions { padding: 20px; display: grid; gap: 16px; }
 .stepActions form { display: grid; gap: 16px; }
-.stepActions p, .muted { color: #666; font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
+.stepActions p, .muted { color: var(--signal-secondary-text); font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
 .stepActions label, .content label { display: grid; gap: 8px; font-size: 14px; }
-.stepActions input, .content input { width: 100%; border: 1px solid #b7b7b7; padding: 10px; border-radius: 8px; }
-.primary, .content button, .error button { border-radius: 8px; padding: 9px 12px; background: #ededed; cursor: pointer; font-size: 13px; }
-.primary, .content .primary { background: #2867f5; color: white; font-weight: 600; }
+.stepActions input, .content input { width: 100%; border: 1px solid var(--signal-form-border); padding: 10px; border-radius: 8px; }
+.primary, .content button, .error button { border-radius: 8px; padding: 9px 12px; background: var(--signal-composer); cursor: pointer; font-size: 13px; }
+.primary, .content .primary { background: var(--signal-blue); color: var(--signal-white); font-weight: 600; }
 .primary:disabled, .content button:disabled { opacity: .5; cursor: default; }
-.selection { width: 22px; height: 22px; border: 1px solid #aaa; border-radius: 50%; display: grid; place-items: center; color: #2867f5; flex: none; }
-.dialog { margin: auto; padding: 0; border: 0; width: min(520px, calc(100vw - 40px)); max-height: calc(100dvh - 40px); border-radius: 16px; color: #292929; background: white; }
-.dialog::backdrop { background: #0005; }
+.selection { width: 22px; height: 22px; border: 1px solid var(--signal-input-border); border-radius: 50%; display: grid; place-items: center; color: var(--signal-link); flex: none; }
+.dialog { margin: auto; padding: 0; border: 0; width: min(520px, calc(100vw - 40px)); max-height: calc(100dvh - 40px); border-radius: 16px; color: var(--signal-text); background: var(--signal-surface); }
+.dialog::backdrop { background: var(--signal-backdrop); }
 .content { padding: 24px; display: grid; gap: 20px; }
 .heading { display: flex; align-items: center; gap: 12px; }
 .heading h2 { flex: 1; min-width: 0; overflow-wrap: anywhere; font-size: 21px; font-weight: 600; }
-.row { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; padding: 10px 0; border-bottom: 1px solid #eee; }
+.row { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--signal-fine-border); }
 .identity { flex: 1; min-width: 120px; overflow-wrap: anywhere; }
 .identity strong, .identity small { display: block; }
-.identity small { color: #666; font-size: 12px; margin-top: 4px; }
-.role { font-size: 11px; padding: 3px 6px; border-radius: 5px; background: #eee; }
+.identity small { color: var(--signal-secondary-text); font-size: 12px; margin-top: 4px; }
+.role { font-size: 11px; padding: 3px 6px; border-radius: 5px; background: var(--signal-fine-border); }
 .actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-.error { background: #fff1f1; color: #a62121; border-radius: 8px; padding: 12px; margin: 0 12px 12px; font-size: 13px; line-height: 1.5; }
+.error { background: var(--signal-error-surface); color: var(--signal-error); border-radius: 8px; padding: 12px; margin: 0 12px 12px; font-size: 13px; line-height: 1.5; }
 .content .error { margin: 0; }
-.content .danger { color: #a62121; }
-.confirmation { background: #f4f4f4; padding: 14px; border-radius: 8px; display: grid; gap: 12px; font-size: 14px; }
+.content .danger { color: var(--signal-error); }
+.confirmation { background: var(--signal-confirmation); padding: 14px; border-radius: 8px; display: grid; gap: 12px; font-size: 14px; }
 .memberList { list-style: none; padding: 0; }
+
+@media (max-width: 640px) {
+  .dialog { width: calc(100vw - 24px); max-height: calc(100dvh - 24px); overflow-y: auto; }
+  .content { padding: 16px; }
+  .stepActions input, .content input { min-width: 0; font-size: 16px; }
+}

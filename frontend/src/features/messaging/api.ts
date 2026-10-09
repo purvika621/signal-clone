@@ -4,7 +4,8 @@ import type { ConversationPreview, PreviewMessage, Profile, ReceiptStatus } from
 export type User = { id: string; username: string | null; phone_e164: string | null; display_name: string; avatar_url: string | null; online: boolean; last_seen_at: string | null };
 export type Session = { user: User; needs_profile: boolean };
 export type Contact = { user: User; alias: string | null; presence: string };
-export type Message = { id: string; sequence: number; client_message_id: string | null; kind: "text" | "system"; body: string; created_at: string; sender: User | null; receipt: ReceiptStatus | null };
+export type Reaction = { user_id: string; emoji: string };
+export type Message = { id: string; sequence: number; client_message_id: string | null; kind: "text" | "system"; body: string; created_at: string; sender: User | null; receipt: ReceiptStatus | null; reactions?: Reaction[]; reaction_version?: number };
 export type Conversation = { id: string; kind: "direct" | "group"; title: string; avatar_url: string | null; other_user: User | null; last_activity_at: string; unread_count: number; latest_message: Message | null };
 
 function object(value: unknown): Record<string, unknown> {
@@ -30,7 +31,7 @@ export function parseMessage(value: unknown): Message {
   const v = object(value);
   if (v.kind !== "text" && v.kind !== "system") throw new ApiError("Unexpected message type");
   if (v.receipt !== null && v.receipt !== "sent" && v.receipt !== "delivered" && v.receipt !== "read") throw new ApiError("Unexpected receipt");
-  return { id: string(v.id), sequence: integer(v.sequence), client_message_id: optionalString(v.client_message_id), kind: v.kind, body: string(v.body), created_at: date(v.created_at), sender: v.sender === null ? null : parseUser(v.sender), receipt: v.receipt };
+  return { id: string(v.id), sequence: integer(v.sequence), client_message_id: optionalString(v.client_message_id), kind: v.kind, body: string(v.body), created_at: date(v.created_at), sender: v.sender === null ? null : parseUser(v.sender), receipt: v.receipt, reaction_version: v.reaction_version === undefined ? 0 : integer(v.reaction_version), reactions: v.reactions === undefined ? [] : list(v.reactions, (entry) => { const r = object(entry); return { user_id: string(r.user_id), emoji: string(r.emoji) }; }) };
 }
 export function parseConversation(value: unknown): Conversation {
   const v = object(value);
@@ -82,9 +83,10 @@ export async function getHistory(id: string, currentUser: string, signal?: Abort
 }
 export function messageView(m: Message, currentUser: string): PreviewMessage {
   return { id: m.id, clientId: m.client_message_id ?? undefined, sequence: m.sequence, createdAt: m.created_at, kind: m.kind, sender: m.sender ? profile(m.sender) : { id: "system", name: "System" }, outgoing: m.sender?.id === currentUser,
-    text: m.body, timestamp: new Date(m.created_at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }), dateLabel: new Date(m.created_at).toLocaleDateString([], { year: "numeric", month: "long", day: "numeric" }), receipt: m.receipt ?? undefined };
+    text: m.body, timestamp: new Date(m.created_at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }), dateLabel: new Date(m.created_at).toLocaleDateString([], { year: "numeric", month: "long", day: "numeric" }), receipt: m.receipt ?? undefined, reactions: m.reactions ?? [], reactionVersion: m.reaction_version ?? 0 };
 }
 export const sendMessage = (id: string, client_message_id: string, body: string) => apiRequest(`${path}/conversations/${encodeURIComponent(id)}/messages`, parseMessage, json({ client_message_id, body }));
+export const setReaction = (id: string, messageId: string, emoji: string, active: boolean) => apiRequest(`${path}/conversations/${encodeURIComponent(id)}/messages/${encodeURIComponent(messageId)}/reactions`, parseMessage, json({ emoji, active }));
 export const markRead = (id: string, through_sequence: number) => apiRequest(`${path}/conversations/${encodeURIComponent(id)}/read`, parseConversation, json({ through_sequence }));
 export const markDelivered = (id: string, message_ids: string[]) => apiRequest(`${path}/conversations/${encodeURIComponent(id)}/delivered`, (v) => { if (object(v).ok !== true) throw new ApiError("Acknowledgement failed"); return true; }, json({ message_ids }));
 export const pendingDelivery = () => apiRequest(`${path}/messages/pending-delivery`, (v) => list(v, (entry) => { const row = object(entry); return { conversation_id: string(row.conversation_id), message_ids: list(row.message_ids, string) }; }));
@@ -100,7 +102,7 @@ export type LiveEvent = { type: string; eventId?: number; conversation?: Convers
 export function parseLiveEvent(value: unknown): LiveEvent {
   const e = object(value), p = object(e.payload), type = string(e.type);
   const common = { type, eventId: e.event_id === undefined ? undefined : integer(e.event_id) };
-  if (["message.created", "message.receipt_updated", "conversation.updated", "group.created", "group.members_updated"].includes(type)) return { ...common, conversation: parseConversation(p.conversation), messages: list(p.messages, parseMessage) };
+  if (["message.created", "message.receipt_updated", "message.reactions_updated", "conversation.updated", "group.created", "group.members_updated"].includes(type)) return { ...common, conversation: parseConversation(p.conversation), messages: list(p.messages, parseMessage) };
   if (type === "conversation.access_revoked") return { ...common, conversationId: string(p.conversation_id) };
   if (type === "presence.updated") { if (typeof p.online !== "boolean") throw new ApiError("Invalid presence event"); return { ...common, userId: string(p.user_id), online: p.online, lastSeen: p.last_seen_at === null ? null : date(p.last_seen_at) }; }
   if (type === "typing.updated") { if (typeof p.is_typing !== "boolean") throw new ApiError("Invalid typing event"); return { ...common, userId: string(p.user_id), conversationId: string(e.conversation_id), name: string(p.name), typing: p.is_typing, expires: Date.parse(date(p.expires_at)) }; }

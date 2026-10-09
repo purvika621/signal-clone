@@ -4,16 +4,17 @@ from typing import Annotated
 
 from fastapi import APIRouter, HTTPException, Query, WebSocket, WebSocketDisconnect
 from pydantic import ValidationError
-from sqlalchemy import func, select
+from sqlalchemy import delete, func, select, update
+from sqlalchemy.dialects.sqlite import insert
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.auth import COOKIE_NAME, CurrentUser, Db, mutation_origin, validated_session
 from app.config import settings
-from app.message_service import acknowledge_delivery, acknowledge_read, event_envelope, members, presence_changed, send_message
-from app.messaging import member_conversation
-from app.models import ConversationMember, Message, MessageReceipt, UserEvent
+from app.message_service import acknowledge_delivery, acknowledge_read, commit_events, event_envelope, members, presence_changed, send_message
+from app.messaging import member_conversation, message_out
+from app.models import ConversationMember, Message, MessageReceipt, MessageReaction, UserEvent
 from app.realtime import Connection, manager
-from app.schemas import ConversationOut, DeliveryInput, MessageOut, ReadInput, SendInput, TypingInput
+from app.schemas import ConversationOut, DeliveryInput, MessageOut, ReadInput, SendInput, TypingInput, ReactionInput
 
 router = APIRouter(prefix="/api/v1")
 
@@ -21,6 +22,27 @@ router = APIRouter(prefix="/api/v1")
 @router.post("/conversations/{conversation_id}/messages", response_model=MessageOut, dependencies=[])
 async def send(conversation_id: str, body: SendInput, user: CurrentUser, db: Db):
     return send_message(db, user.id, conversation_id, body)
+
+
+@router.post("/conversations/{conversation_id}/messages/{message_id}/reactions", response_model=MessageOut)
+async def reaction(conversation_id: str, message_id: str, body: ReactionInput, user: CurrentUser, db: Db):
+    member_conversation(db, conversation_id, user.id)
+    message = db.scalar(select(Message).where(Message.id == message_id, Message.conversation_id == conversation_id))
+    if message is None:
+        raise HTTPException(404, "Message not found in this conversation")
+    if message.kind != "text":
+        raise HTTPException(422, "Only text messages support reactions")
+    if body.active:
+        result = db.execute(insert(MessageReaction).values(message_id=message_id, user_id=user.id, emoji=body.emoji).on_conflict_do_nothing())
+    else:
+        result = db.execute(delete(MessageReaction).where(MessageReaction.message_id == message_id, MessageReaction.user_id == user.id, MessageReaction.emoji == body.emoji))
+    if result.rowcount:
+        db.execute(update(Message).where(Message.id == message_id).values(reaction_version=Message.reaction_version + 1))
+        commit_events(db, conversation_id, "message.reactions_updated", [message_id])
+    else:
+        db.commit()
+        db.expire_all()
+    return message_out(message, user.id)
 
 
 @router.post("/conversations/{conversation_id}/delivered")

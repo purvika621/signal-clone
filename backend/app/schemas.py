@@ -82,6 +82,16 @@ class ContactOut(BaseModel):
     presence: str = "Offline"
 
 
+class ReactionOut(BaseModel):
+    user_id: str
+    emoji: Literal["❤️", "😂", "👍", "😮", "😢", "🎉"]
+
+
+class ReactionInput(Input):
+    emoji: Literal["❤️", "😂", "👍", "😮", "😢", "🎉"]
+    active: bool
+
+
 class MessageOut(BaseModel):
     id: str
     sequence: int
@@ -91,6 +101,8 @@ class MessageOut(BaseModel):
     created_at: datetime
     sender: UserOut | None
     receipt: Literal["sent", "delivered", "read"] | None
+    reactions: list[ReactionOut] = Field(default_factory=list)
+    reaction_version: int = 0
 
 
 class ConversationOut(BaseModel):

@@ -63,7 +63,7 @@ export function GroupDetails({ id, userId, revision, onClose, onLeave }: { id: s
     else if (confirmation.kind === "remove") void command(() => removeGroupMember(id, confirmation.uid!));
     else void command(() => setGroupRole(id, confirmation.uid!, confirmation.role!));
   }
-  return <dialog ref={dialog} className={styles.dialog} aria-labelledby="group-details-title" onCancel={(e) => { if (busy) e.preventDefault(); else onClose(); }}><div className={styles.content}>
+  return <dialog ref={dialog} className={styles.dialog} aria-labelledby="group-details-title" onCancel={(e) => { if (busy) e.preventDefault(); else if (confirmation) { e.preventDefault(); setConfirmation(null); } else if (adding) { e.preventDefault(); setAdding(false); } else onClose(); }}><div className={styles.content}>
     <header className={styles.heading}><h2 id="group-details-title">Group details</h2><button type="button" disabled={busy} aria-label="Close group details" onClick={onClose}>Close</button></header>
     {error && <div className={styles.error} role="alert">{error}<button type="button" disabled={busy} onClick={() => adding && contacts === null ? void showAdd() : setAttempt((n) => n + 1)}>Retry loading</button></div>}
     {success && <p role="status">{success}</p>}

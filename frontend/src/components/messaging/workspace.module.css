@@ -9,7 +9,7 @@
 .railPrimary { display: grid; gap: 14px; margin-top: 18px; }
 .railChat { position: relative; }
 .railSelected { background: var(--signal-selected); }
-.railBadge { position: absolute; top: -3px; right: 2px; display: grid; place-items: center; min-width: 20px; height: 20px; padding: 0 4px; color: #fff; background: #fa4c43; border-radius: 20px; font-size: 12px; pointer-events: none; }
+.railBadge { position: absolute; top: -3px; right: 2px; display: grid; place-items: center; min-width: 20px; height: 20px; padding: 0 4px; color: var(--signal-white); background: var(--signal-badge-alert); border-radius: 20px; font-size: 12px; pointer-events: none; }
 .railBottom { display: grid; justify-items: center; gap: 16px; margin-top: auto; }
 .profileButton { display: grid; place-items: center; width: 44px; height: 40px; border: 0; background: transparent; }
 .sidebar { display: flex; flex-direction: column; min-height: 0; min-width: 0; background: var(--signal-sidebar); border-right: 1px solid var(--signal-border); }
@@ -23,7 +23,7 @@
 .searchField input::-webkit-search-cancel-button { display: none; }
 .searchField:focus-within { box-shadow: 0 0 0 2px var(--signal-focus); }
 .searchField > button { width: 22px; height: 24px; }
-.conversationList { flex: 1; min-height: 0; overflow: auto; padding: 0 8px 12px; scrollbar-width: thin; scrollbar-color: #c6c6c6 transparent; }
+.conversationList { flex: 1; min-height: 0; overflow: auto; padding: 0 8px 12px; scrollbar-width: thin; scrollbar-color: var(--signal-scrollbar) transparent; }
 .conversationList ul { list-style: none; padding: 0; margin: 0; }
 .conversationRow { display: flex; align-items: center; gap: 13px; width: 100%; min-width: 0; height: 86px; padding: 12px 16px; text-align: left; border: 0; border-radius: 11px; color: inherit; background: transparent; cursor: pointer; }
 .conversationRow:hover { background: var(--signal-hover); }
@@ -34,8 +34,8 @@
 .activity { flex: 0 0 auto; font-size: 12px; line-height: 18px; color: var(--signal-muted); }
 .rowBottom { display: flex; justify-content: space-between; gap: 8px; min-height: 20px; }
 .preview { display: -webkit-box; flex: 1; min-width: 0; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 20px; color: var(--signal-muted); font-size: 14px; }
-.rowStatus { flex: 0 0 auto; display: flex; align-items: flex-end; align-self: flex-start; padding-top: 2px; color: #8b8b8b; }
-.unreadBadge { display: grid; place-items: center; height: 20px; min-width: 20px; padding: 0 5px; border-radius: 20px; background: var(--signal-blue); color: white; font-size: 12px; font-weight: 500; }
+.rowStatus { flex: 0 0 auto; display: flex; align-items: flex-end; align-self: flex-start; padding-top: 2px; color: var(--signal-row-receipt); }
+.unreadBadge { display: grid; place-items: center; height: 20px; min-width: 20px; padding: 0 5px; border-radius: 20px; background: var(--signal-blue); color: var(--signal-white); font-size: 12px; font-weight: 500; }
 .noResults { padding: 32px 16px; text-align: center; color: var(--signal-muted); font-size: 14px; }
 .chatPane { display: grid; grid-template-rows: var(--signal-header-height) minmax(0, 1fr) auto; min-width: 0; min-height: 0; background: var(--signal-surface); }
 .chatHeader { display: flex; align-items: center; justify-content: space-between; min-width: 0; gap: 16px; padding: 0 24px; background: var(--signal-surface); }
@@ -43,7 +43,7 @@
 .headerText { flex: 1 1 0; min-width: 0; overflow: hidden; }
 .chatIdentity h2 { font-size: 16px; line-height: 22px; font-weight: 600; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
 .headerActions { flex: 0 0 auto; gap: 16px; }
-.messageThread { min-height: 0; min-width: 0; overflow-y: auto; overflow-x: hidden; padding: 0 28px 16px 24px; scrollbar-width: thin; scrollbar-color: #cfcfcf transparent; }
+.messageThread { min-height: 0; min-width: 0; overflow-y: auto; overflow-x: hidden; padding: 0 28px 16px 24px; scrollbar-width: thin; scrollbar-color: var(--signal-scrollbar) transparent; }
 .messages { display: flex; flex-direction: column; min-height: 100%; justify-content: flex-end; }
 .dateSeparator { flex: 0 0 auto; align-self: center; margin: 21px 0 24px; color: var(--signal-muted); font-size: 12px; text-align: center; }
 .messageRow { display: flex; align-items: flex-end; flex: 0 0 auto; min-width: 0; gap: 10px; margin-top: 18px; }
@@ -52,8 +52,8 @@
 .outgoing { justify-content: flex-end; }
 .senderAvatar { display: flex; width: 28px; flex: 0 0 28px; align-items: flex-end; padding-bottom: 2px; }
 .bubble { position: relative; min-width: 66px; max-width: min(72%, 560px); padding: 10px 13px; border-radius: var(--signal-bubble-radius); color: var(--signal-text); background: var(--signal-bubble-incoming); --receipt-background: var(--signal-bubble-incoming); }
-.outgoing .bubble { color: white; background: var(--chat-color, var(--signal-blue)); --receipt-background: var(--chat-color, var(--signal-blue)); }
-.senderName { display: block; margin-bottom: 4px; font-size: 13px; line-height: 18px; font-weight: 600; }
+.outgoing .bubble { color: var(--signal-white); background: var(--chat-color, var(--signal-blue)); --receipt-background: var(--chat-color, var(--signal-blue)); }
+.senderName { color: var(--signal-sender); display: block; margin-bottom: 4px; font-size: 13px; line-height: 18px; font-weight: 600; }
 .messageText { margin: 0; font-size: 15px; line-height: 22px; white-space: pre-wrap; overflow-wrap: anywhere; }
 .metadataSpace { display: inline-block; padding-left: 10px; font-size: 11px; line-height: 16px; color: transparent; user-select: none; }
 .metadataWithReceipt { padding-right: 25px; }
@@ -70,13 +70,13 @@
 .composerActions { display: flex; align-items: center; gap: 12px; }
 .emptyPane { display: grid; place-items: center; min-width: 0; background: var(--signal-surface); }
 .emptyContent { max-width: 360px; padding: 24px; text-align: center; }
-.emptyIcon { display: grid; place-items: center; width: 90px; height: 90px; margin: 0 auto 24px; border-radius: 50%; color: #929292; background: #f1f1f1; }
+.emptyIcon { display: grid; place-items: center; width: 90px; height: 90px; margin: 0 auto 24px; border-radius: 50%; color: var(--signal-empty-icon); background: var(--signal-empty-surface); }
 .emptyContent h2 { margin: 0 0 10px; font-size: 19px; font-weight: 600; }
 .emptyContent p { margin: 0; font-size: 14px; line-height: 21px; color: var(--signal-muted); }
-/* Desktop sizing only; mobile layouts are outside this checkpoint. */
+/* Preserve the desktop shell; compact spacing is reused on tablets. */
 @media (min-width: 1600px) { .messageThread { padding-right: 36px; padding-left: 28px; } }
-.presence { display: block; color: #7b7b7b; font-size: 11px; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.connectionStatus { padding: 6px 20px; font-size: 12px; color: #775518; background: #fff5dd; overflow-wrap: anywhere; }
+.presence { display: block; color: var(--signal-muted); font-size: 11px; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.connectionStatus { padding: 6px 20px; font-size: 12px; color: var(--signal-warning); background: var(--signal-warning-surface); overflow-wrap: anywhere; }
 .connectionStatus button { margin-left: 8px; text-decoration: underline; cursor: pointer; }
 .typingLabel { position: absolute; left: 24px; right: 20px; top: -19px; height: 19px; color: var(--signal-muted); font-size: 12px; background: var(--signal-surface); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .retrySend { color: inherit; border: 0; padding: 0; background: transparent; text-decoration: underline; cursor: pointer; font-size: 11px; }
@@ -94,7 +94,44 @@
 }
 .pickerTools { padding: 12px 20px; font-size: 13px; }
 .pickerHeader { justify-content: flex-start; gap: 12px; }
-.pickerTools button, .noResults button { background: #e6e6e6; border-radius: 8px; padding: 8px 12px; cursor: pointer; }
-.pickerTools p { margin-top: 10px; color: #7b7b7b; }
+.pickerTools button, .noResults button { background: var(--signal-search); border-radius: 8px; padding: 8px 12px; cursor: pointer; }
+.pickerTools p { margin-top: 10px; color: var(--signal-muted); }
 .pickerTools label { display: grid; gap: 8px; margin-top: 10px; }
-.pickerTools input { background: white; border: 1px solid #dedede; border-radius: 8px; padding: 8px; width: 100%; }
+.pickerTools input { background: var(--signal-surface); border: 1px solid var(--signal-border); border-radius: 8px; padding: 8px; width: 100%; }
+
+.mobileBack { display: none; }
+@media (max-width: 640px) {
+  .workspace { grid-template-columns: 52px minmax(0, 1fr); }
+  .rail { padding: 12px 4px; }
+  .rail .railButton { width: 42px; }
+  .sidebar { border-right: 0; }
+  .sidebarHeader { padding-left: 16px; padding-right: 12px; }
+  .conversationRow { padding-left: 10px; padding-right: 10px; gap: 10px; }
+  .workspace > .chatPane, .workspace > .emptyPane { display: none; }
+  .mobileChat { grid-template-columns: minmax(0, 1fr); }
+  .mobileChat > .rail, .mobileChat > .sidebar { display: none; }
+  .mobileChat > .chatPane { display: grid; }
+  .mobileBack { display: inline-flex; }
+  .chatHeader { gap: 6px; padding: 0 8px; }
+  .headerActions { gap: 0; }
+  .bubble { max-width: 85%; }
+  .composer { padding-bottom: max(12px, env(safe-area-inset-bottom)); }
+  .searchField input, .composerField textarea, .pickerTools input { font-size: 16px; }
+  .noResults, .dateSeparator, .senderName { max-width: 100%; overflow-wrap: anywhere; }
+}
+
+.messageContent { position: relative; min-width: 0; max-width: min(72%, 560px); }
+.messageContent .bubble { max-width: 100%; }
+.reactionControls { color: var(--signal-text); }
+.reactButton { position: absolute; top: -12px; right: 8px; z-index: 2; width: 26px; height: 26px; background: var(--signal-surface); border: 1px solid var(--signal-border); border-radius: 50%; opacity: 0; }
+.messageContent:hover .reactButton, .messageContent:focus-within .reactButton { opacity: 1; }
+.reactionPicker { position: relative; z-index: 3; display: flex; flex-wrap: wrap; gap: 2px; width: max-content; max-width: 100%; margin-top: 6px; padding: 4px; background: var(--signal-surface); border: 1px solid var(--signal-border); border-radius: 12px; box-shadow: 0 4px 12px var(--signal-shadow); }
+.reactionPicker button { padding: 5px; font-size: 21px; border-radius: 6px; cursor: pointer; }
+.reactionPicker button:hover, .reactionPicker button[aria-pressed=true] { background: var(--signal-selected); }
+.reactions { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.reactions button { display: inline-flex; align-items: center; gap: 4px; padding: 3px 7px; border: 1px solid var(--signal-border); border-radius: 14px; background: var(--signal-sidebar); font-size: 16px; cursor: pointer; }
+.reactions button[aria-pressed=true] { background: var(--signal-filter); border-color: var(--signal-focus); }
+.reactions span { font-size: 12px; }
+.reactionError { color: var(--signal-error); background: var(--signal-error-surface); padding: 6px; border-radius: 6px; font-size: 12px; overflow-wrap: anywhere; }
+@media (hover: none) { .reactButton { opacity: 1; } }
+@media (max-width: 640px) { .messageContent { max-width: 85%; } }

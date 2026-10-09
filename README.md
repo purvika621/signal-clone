@@ -17,7 +17,7 @@ Source repository: [purvika621/signal-clone](https://github.com/purvika621/signa
 - Named groups, roster/Admin labels, rename, admin add/remove/role controls, confirmed leaving, last-admin protection and immediate access revocation.
 - Signal-style desktop layout, navigation menus, in-app toasts and operation feedback. Incoming notifications suppress duplicates, own/system messages, replay and active reading; browser notification permission is never requested.
 
-Privacy, Notifications and Appearance settings, Calls, Stories and Linked devices are reachable **Coming Soon** placeholders. SMS, pairing, key exchange and real Signal encryption are mocked/omitted; messages are plaintext demo data. Optional attachments, reactions, quoted replies, disappearing messages, dark mode, mobile/tablet redesign and extra shortcuts are deferred. In-chat message search is not implemented; required conversation/contact search works.
+Privacy and Notifications settings, Calls, Stories and Linked devices are reachable **Coming Soon** placeholders. SMS, pairing, key exchange and real Signal encryption are mocked/omitted; messages are plaintext demo data. Optional attachments, quoted replies, disappearing messages are deferred. In-chat message search is not implemented; required conversation/contact search works.
 
 The official Chat.png/Group_Chat.png desktop brand references guide the reviewed layout; OS/marketing frames are excluded. Stock avatar attribution is in frontend/public/avatars/SOURCES.md. Exact unseen menu/settings geometry is provisional as recorded in DESIGN.md.
 
@@ -71,7 +71,7 @@ Commit only the provided local/production **example** environment files, not act
 
 `localhost` and `127.0.0.1` are different CORS origins. Production examples use deliberately non-working example.invalid domains; replace them with actual public origins when hosting is authorized.
 
-`python -m app.init_db` applies versioned migrations without resetting data. `--seed` adds missing deterministic demo records and is repeatable without overwriting profiles, messages, memberships, receipts or read cursors. Fresh seed: six users, four direct conversations, two groups and forty messages. Current migration: 0003. Never delete the database or substitute create_all for an upgrade. Production startup migrates but never implicitly seeds.
+`python -m app.init_db` applies versioned migrations without resetting data. `--seed` adds missing deterministic demo records and is repeatable without overwriting profiles, messages, memberships, receipts or read cursors. Fresh seed: six users, four direct conversations, two groups and forty messages. Current migration: 0004. Never delete the database or substitute create_all for an upgrade. Production startup migrates but never implicitly seeds.
 
 ## Demo and two-user testing
 
@@ -96,9 +96,10 @@ Next decodes API JSON into typed contracts and reconciles optimistic/REST/socket
 | conversations, direct_pairs | Direct/group metadata and a unique canonically ordered direct user pair |
 | conversation_members | Unique conversation/user membership, role, join/leave time and read cursor |
 | messages, message_receipts | Ordered durable messages, unique sender/client ID and per-recipient delivered/read timestamps |
+| message_reactions | Unique message/user/emoji records; message reaction revision prevents stale updates |
 | user_events | Addressed durable replay sequences with bounded retention |
 | group_creations | Immutable creator/request intent for duplicate-safe group creation |
-| user_settings | Storage prepared for future preferences; current settings categories are honest placeholders |
+| user_settings | Storage prepared for future preferences; Privacy/Notifications are placeholders; appearance is stored locally in the browser |
 
 Foreign keys, WAL, checks, indexes and unique constraints protect the schema. Unread excludes own/system/pre-join messages. Sent means committed; delivered means a recipient acknowledgement; read means focused/visible reading at the bottom. Group aggregate receipts require all original recipients. Historical receipts remain after removal, so an old receipt may remain incomplete. Active members see full pre-join history without retroactive unread/receipt obligations; departed users lose API access. The last admin must promote another member before leaving/demotion.
 
@@ -148,3 +149,22 @@ npm run start:production -- --port "$PORT"
 ```
 
 Each process needs its own internal port. The Docker package runs Next on 3000, FastAPI on 8000 and Nginx on the public PORT. See DEPLOYMENT.md for Railway instructions and local container checks. The verified hosted demo link will be added after deployment and hosted testing. No deployment is claimed complete.
+
+## Appearance and keyboard shortcuts
+
+Open Settings → Appearance and choose Light, Dark, or System. System follows your operating system automatically. The preference is stored locally per browser, survives refresh/logout, and is shared across tabs; it is not a server-side account setting. Browser storage must be available for persistence.
+
+- Ctrl/Cmd+K focuses conversation search.
+- Ctrl/Cmd+Shift+N opens New chat.
+- Escape closes the topmost menu/dialog; in group details it dismisses a confirmation/member picker first. It also closes the sidebar new-chat flow. Message drafts are retained.
+- Enter sends in the composer; Shift+Enter inserts a newline. IME composition does not send or trigger shortcuts. Navigation shortcuts are ignored in modal dialogs and unrelated editable inputs.
+
+These bonuses do not change mock authentication or Chrome Safe Browsing status. Browser visual/regression checks for the bonus checkpoint remain pending; earlier manual results describe earlier phases.
+
+Minimal responsive layout: at 640px and below, show the conversation list or selected chat; the chat header back button returns to the list and keeps drafts. Tablets retain the compact sidebar/chat layout, and desktop proportions remain unchanged. Both themes share these breakpoints.
+
+## Emoji reactions
+
+Hover/focus a persisted text message (the reaction button is visible on touch devices), open the smile button, and choose ❤️ 😂 👍 😮 😢 🎉. Tap a selected emoji or your highlighted count to remove your reaction. Counts include every reacting user; one user may select multiple different emoji. Mutations are idempotent, membership checked, stored in SQLite, and delivered through the existing authenticated WebSocket/replay flow. Reactions do not alter inbox ordering or unread counts. System/pending messages cannot be reacted to.
+
+Migration 0004 adds a reaction table and revision column without resetting data; normal production startup applies it. These final bonuses require owner browser inspection; automated protocol/state checks do not claim UI verification.

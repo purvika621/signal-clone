@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { PreviewMessage } from "./types";
 import { shouldNotifyIncoming } from "./notifications";
 import type { Message } from "./api";
-import { errorMessage, getHistory, getInbox, markDelivered, markRead, messageView, parseLiveEvent, pendingDelivery, profile, sendMessage, websocketUrl, type Conversation, type User } from "./api";
+import { errorMessage, getHistory, getInbox, markDelivered, markRead, messageView, parseLiveEvent, pendingDelivery, profile, sendMessage, setReaction, websocketUrl, type Conversation, type User } from "./api";
 
 type Pending = { id: string; conversationId: string; text: string; createdAt: string; state: "sending" | "failed"; failure?: string };
 type Thread = { messages: PreviewMessage[]; loaded: boolean; error?: string };
@@ -12,7 +12,7 @@ export function mergeMessages(previous: PreviewMessage[], incoming: PreviewMessa
   const map = new Map(previous.map((m) => [m.id, m]));
   for (const message of incoming) {
     const old = map.get(message.id);
-    map.set(message.id, { ...old, ...message, receipt: old?.receipt && (!message.receipt || rank[old.receipt] > rank[message.receipt]) ? old.receipt : message.receipt });
+    map.set(message.id, { ...old, ...message, reactions: (old?.reactionVersion ?? 0) > (message.reactionVersion ?? 0) ? old?.reactions : message.reactions, reactionVersion: Math.max(old?.reactionVersion ?? 0, message.reactionVersion ?? 0), receipt: old?.receipt && (!message.receipt || rank[old.receipt] > rank[message.receipt]) ? old.receipt : message.receipt });
   }
   return [...map.values()].sort((a, b) => (a.sequence ?? Number.MAX_SAFE_INTEGER) - (b.sequence ?? Number.MAX_SAFE_INTEGER) || a.id.localeCompare(b.id));
 }
@@ -299,9 +299,15 @@ export function useMessaging(user: User, onIncoming: (conversation: Conversation
     const id = selectedId; stopTyping(id); setDrafts((previous) => ({ ...previous, [id]: "" }));
     void submitPending({ id: crypto.randomUUID(), conversationId: id, text: body, createdAt: new Date().toISOString(), state: "sending" });
   }
+  async function react(messageId: string, emoji: string, active: boolean) {
+    const id = selectedRef.current;
+    if (!id || revoked.current.has(id)) return;
+    const message = await setReaction(id, messageId, emoji, active);
+    if (alive.current) acceptMessages(id, [messageView(message, user.id)]);
+  }
   function retry(clientId: string) { const item = pending.find((p) => p.id === clientId); if (item && item.state === "failed") void submitPending(item); }
   function opened(c: Conversation) { acceptConversation(c); setInboxStatus("ready"); select(c.id); }
   const pendingViews: PreviewMessage[] = pending.filter((p) => p.conversationId === selectedId).map((p) => ({ id: p.id, clientId: p.id, sender: profile(userRef.current), outgoing: true, kind: "text", text: p.text, createdAt: p.createdAt, timestamp: new Date(p.createdAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }), dateLabel: new Date(p.createdAt).toLocaleDateString([], { year: "numeric", month: "long", day: "numeric" }), state: p.state, failure: p.failure }));
   const messages = [...(currentThread?.messages ?? []), ...pendingViews.sort((a, b) => a.createdAt!.localeCompare(b.createdAt!))];
-  return { conversations, selectedId, select, opened, groupChanges, revokeConversation, inboxStatus, inboxError, retryInbox: loadInbox, messages, historyLoading: !currentThread?.loaded, historyError: currentThread?.error, retryHistory: () => selectedId && void loadHistory(selectedId), connection, notice, retryConnection: () => { setNotice(""); void recoverDelivery(); void loadInbox(); if (selectedId) void loadHistory(selectedId); setReadTick((n) => n + 1); }, typing: selectedId ? (typing[selectedId] ?? []).map((t) => t.name).join(", ") : "", draft: selectedId ? drafts[selectedId] ?? "" : "", setDraft, send, retry, stopTyping, setAtBottom };
+  return { conversations, selectedId, select, opened, groupChanges, revokeConversation, inboxStatus, inboxError, retryInbox: loadInbox, messages, historyLoading: !currentThread?.loaded, historyError: currentThread?.error, retryHistory: () => selectedId && void loadHistory(selectedId), connection, notice, retryConnection: () => { setNotice(""); void recoverDelivery(); void loadInbox(); if (selectedId) void loadHistory(selectedId); setReadTick((n) => n + 1); }, typing: selectedId ? (typing[selectedId] ?? []).map((t) => t.name).join(", ") : "", draft: selectedId ? drafts[selectedId] ?? "" : "", setDraft, send, retry, react, stopTyping, setAtBottom };
 }

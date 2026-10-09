@@ -11,9 +11,14 @@ export function ActionMenu({ label, icon = "more", items, left = false, classNam
     if (!open) return;
     ref.current?.querySelector<HTMLButtonElement>("[data-menu-item]")?.focus();
     const dismiss = (event: PointerEvent) => { if (!ref.current?.contains(event.target as Node)) setOpen(false); };
-    const escape = (event: KeyboardEvent) => { if (event.key === "Escape") { setOpen(false); trigger.current?.focus(); } };
+    const escape = (event: KeyboardEvent) => { if (event.key === "Escape" && !event.defaultPrevented && !event.isComposing && event.keyCode !== 229) {
+      const dialogs = document.querySelectorAll("dialog[open]");
+      const top = dialogs[dialogs.length - 1];
+      if (top && !top.contains(ref.current)) return;
+      event.preventDefault(); event.stopImmediatePropagation(); setOpen(false); trigger.current?.focus();
+    } };
     document.addEventListener("pointerdown", dismiss); document.addEventListener("keydown", escape);
     return () => { document.removeEventListener("pointerdown", dismiss); document.removeEventListener("keydown", escape); };
   }, [open]);
-  return <div ref={ref} className={styles.menuAnchor}><button ref={trigger} type="button" className={`signal-icon-button ${className}`} aria-label={label} title={label} aria-expanded={open} onClick={() => setOpen((value) => !value)}><Icon name={icon} /></button>{open && <div className={`${styles.menu} ${left ? styles.menuLeft : ""}`} aria-label={label} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node)) setOpen(false); }}>{items.map((item) => <button data-menu-item type="button" key={item.label} onClick={() => { setOpen(false); trigger.current?.focus(); item.action(); }}>{item.label}</button>)}</div>}</div>;
+  return <div ref={ref} className={styles.menuAnchor}><button ref={trigger} type="button" className={`signal-icon-button ${className}`} aria-label={label} title={label} aria-expanded={open} onClick={() => setOpen((value) => !value)}><Icon name={icon} /></button>{open && <div data-action-menu className={`${styles.menu} ${left ? styles.menuLeft : ""}`} aria-label={label} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node)) setOpen(false); }}>{items.map((item) => <button data-menu-item type="button" key={item.label} onClick={() => { setOpen(false); trigger.current?.focus(); item.action(); }}>{item.label}</button>)}</div>}</div>;
 }

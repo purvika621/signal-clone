@@ -1,4 +1,32 @@
 :root {
+  color-scheme: light;
+  --signal-input-border: #aaa;
+  --signal-form-border: #b7b7b7;
+  --signal-secondary-text: #666;
+  --signal-error: #a62121;
+  --signal-error-surface: #fff1f1;
+  --signal-warning: #775518;
+  --signal-warning-surface: #fff5dd;
+  --signal-filter: #dce7ff;
+  --signal-filter-text: #2259c7;
+  --signal-empty-surface: #f1f1f1;
+  --signal-scrollbar: #c6c6c6;
+  --signal-avatar-surface: #dcd5eb;
+  --signal-avatar-text: #635177;
+  --signal-note-surface: #e9defe;
+  --signal-note-text: #7c3cff;
+  --signal-sender: #4278a3;
+  --signal-link: #2867f5;
+  --signal-role-surface: #eee;
+  --signal-confirmation: #f4f4f4;
+  --signal-fine-border: #eee;
+  --signal-row-receipt: #8b8b8b;
+  --signal-empty-icon: #929292;
+  --signal-backdrop: #0005;
+  --signal-shadow: #0002;
+  --signal-white: #fff;
+  --signal-badge-alert: #fa4c43;
+
   --signal-surface: #ffffff;
   --signal-sidebar: #f6f6f6;
   --signal-selected: #dedede;
@@ -16,4 +44,83 @@
   --signal-header-height: 76px;
   --signal-body-size: 15px;
   --signal-bubble-radius: 20px;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --signal-surface: #1b1b1f;
+  --signal-sidebar: #232327;
+  --signal-selected: #3b3b42;
+  --signal-hover: #303036;
+  --signal-border: #3c3c44;
+  --signal-search: #343439;
+  --signal-composer: #343439;
+  --signal-bubble-incoming: #35353c;
+  --signal-text: #eeeeef;
+  --signal-muted: #b0b0b9;
+  --signal-focus: #91b3ff;
+  --signal-input-border: #686873;
+  --signal-form-border: #686873;
+  --signal-secondary-text: #b0b0b9;
+  --signal-error: #ffb4b4;
+  --signal-error-surface: #46272c;
+  --signal-warning: #f6d598;
+  --signal-warning-surface: #423725;
+  --signal-filter: #304571;
+  --signal-filter-text: #c0d3ff;
+  --signal-empty-surface: #303036;
+  --signal-scrollbar: #686873;
+  --signal-avatar-surface: #463c58;
+  --signal-avatar-text: #e1ceff;
+  --signal-note-surface: #463265;
+  --signal-note-text: #c8a6ff;
+  --signal-sender: #9bc9ed;
+  --signal-link: #91b3ff;
+  --signal-role-surface: #3b3b42;
+  --signal-confirmation: #303036;
+  --signal-fine-border: #3c3c44;
+  --signal-row-receipt: #b0b0b9;
+  --signal-empty-icon: #b0b0b9;
+  --signal-backdrop: #0009;
+  --signal-shadow: #0006;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not([data-theme="dark"]) {
+  color-scheme: dark;
+  --signal-surface: #1b1b1f;
+  --signal-sidebar: #232327;
+  --signal-selected: #3b3b42;
+  --signal-hover: #303036;
+  --signal-border: #3c3c44;
+  --signal-search: #343439;
+  --signal-composer: #343439;
+  --signal-bubble-incoming: #35353c;
+  --signal-text: #eeeeef;
+  --signal-muted: #b0b0b9;
+  --signal-focus: #91b3ff;
+  --signal-input-border: #686873;
+  --signal-form-border: #686873;
+  --signal-secondary-text: #b0b0b9;
+  --signal-error: #ffb4b4;
+  --signal-error-surface: #46272c;
+  --signal-warning: #f6d598;
+  --signal-warning-surface: #423725;
+  --signal-filter: #304571;
+  --signal-filter-text: #c0d3ff;
+  --signal-empty-surface: #303036;
+  --signal-scrollbar: #686873;
+  --signal-avatar-surface: #463c58;
+  --signal-avatar-text: #e1ceff;
+  --signal-note-surface: #463265;
+  --signal-note-text: #c8a6ff;
+  --signal-sender: #9bc9ed;
+  --signal-link: #91b3ff;
+  --signal-role-surface: #3b3b42;
+  --signal-confirmation: #303036;
+  --signal-fine-border: #3c3c44;
+  --signal-row-receipt: #b0b0b9;
+  --signal-empty-icon: #b0b0b9;
+  --signal-backdrop: #0009;
+  --signal-shadow: #0006;
+  }
 }

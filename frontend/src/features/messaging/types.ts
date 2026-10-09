@@ -5,6 +5,7 @@ export type PreviewMessage = {
   id: string; kind?: "text" | "system"; sender: Profile; outgoing: boolean; text: string;
   timestamp: string; dateLabel: string; receipt?: ReceiptStatus;
   sequence?: number; clientId?: string; createdAt?: string;
+  reactions?: { user_id: string; emoji: string }[]; reactionVersion?: number;
   state?: "sending" | "failed"; failure?: string;
 };
 export type ConversationPreview = {

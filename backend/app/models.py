@@ -142,6 +142,8 @@ class Message(Base):
     created_at: Mapped[datetime] = mapped_column(UTCDateTime(), default=now_utc)
     conversation: Mapped[Conversation] = relationship(back_populates="messages")
     sender: Mapped[User | None] = relationship()
+    reaction_version: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    reactions: Mapped[list["MessageReaction"]] = relationship(back_populates="message", order_by="MessageReaction.user_id, MessageReaction.emoji")
     receipts: Mapped[list["MessageReceipt"]] = relationship(back_populates="message")
 
 
@@ -179,3 +181,12 @@ class UserEvent(Base):
     created_at: Mapped[datetime] = mapped_column(UTCDateTime(), default=now_utc)
     user: Mapped[User] = relationship()
 
+
+
+class MessageReaction(Base):
+    __tablename__ = "message_reactions"
+    __table_args__ = (CheckConstraint("emoji IN ('❤️', '😂', '👍', '😮', '😢', '🎉')", name="ck_reaction_emoji"),)
+    message_id: Mapped[str] = mapped_column(ForeignKey("messages.id"), primary_key=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    emoji: Mapped[str] = mapped_column(String(8), primary_key=True)
+    message: Mapped[Message] = relationship(back_populates="reactions")
